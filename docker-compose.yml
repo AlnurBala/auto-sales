@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - liquibase
+    networks:
+      - adminer-network
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Alnur09122001
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - adminer-network
+
+  adminer:
+    image: adminer
+    ports:
+      - "8081:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    depends_on:
+      - db
+    networks:
+      - adminer-network
+
+  liquibase:
+    image: liquibase/liquibase:4.9.1
+    volumes:
+      - ./liquibase/changelog:/liquibase/changelog
+    depends_on:
+      - db
+    command: "--url=jdbc:postgresql://db:5432/postgres --changeLogFile=/liquibase/changelog/changelog-master.xml update"
+    networks:
+      - adminer-network
+
+
+
+volumes:
+  postgres-data:
+
+networks:
+  adminer-network:

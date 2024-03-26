@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: Alnur09122001
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    root: info
+    properties:
+      hibernate:
+        default_schema: public
+  application:
+    name: liquibase
+  liquibase:
+    change-log: classpath:liquibase/changelog-master.xml
+    default-schema: public
+    enabled: true
+    database-change-log-table: TRANSACTION_DBLOG
+    database-change-log-lock-table: TRANSACTION_DBLOCK
+  docker:
+    compose:
+      enabled: false
+
+  springdoc:
+    swagger-ui:
+      enabled: true
+
+auto-sales:
+  openapi:
+    dev-url: http://localhost:8080
+    prod-url: https://knowpool-api.com
